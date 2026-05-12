@@ -1,9 +1,9 @@
-const REPO = "badarang/powpowlove-downloads";
+const REPO = "thswldns77/powpowlove-downloads";
 const RELEASES_URL = `https://api.github.com/repos/${REPO}/releases?per_page=30`;
 const LOCAL_RELEASES_URL = "./releases.json";
 
 const fallbackRelease = {
-  html_url: "https://github.com/badarang/powpowlove-downloads/releases/tag/v0.1.0-dev.20260512",
+  html_url: "https://github.com/thswldns77/powpowlove-downloads/releases/tag/v0.1.0-dev.20260512",
   name: "POW POW LOVE v0.1.0 dev debug",
   tag_name: "v0.1.0-dev.20260512",
   prerelease: true,
@@ -16,7 +16,7 @@ const fallbackRelease = {
       size: 82257148,
       download_count: 0,
       browser_download_url:
-        "https://github.com/badarang/powpowlove-downloads/releases/download/v0.1.0-dev.20260512/powpowlove-v0.1.0-dev.20260512-debug.apk",
+        "https://github.com/thswldns77/powpowlove-downloads/releases/download/v0.1.0-dev.20260512/powpowlove-v0.1.0-dev.20260512-debug.apk",
     },
   ],
 };
