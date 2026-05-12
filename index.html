@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light">
+    <title>POW POW LOVE Android Builds</title>
+    <meta
+      name="description"
+      content="POW POW LOVE Android development APK download page."
+    >
+    <link rel="preload" href="./assets/story_title_logo.png" as="image">
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="site-header" aria-label="POW POW LOVE Android builds">
+        <a class="brand" href="./" aria-label="POW POW LOVE Android builds home">
+          <img src="./assets/story_title_logo.png" alt="POW POW LOVE" width="1577" height="997">
+        </a>
+        <div class="header-actions">
+          <a class="ghost-link" href="https://github.com/badarang/powpowlove-downloads/releases" target="_blank" rel="noreferrer">
+            GitHub Releases
+          </a>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero" aria-labelledby="page-title">
+          <div class="hero-copy">
+            <p class="eyebrow">Android development builds</p>
+            <h1 id="page-title">POW POW LOVE</h1>
+            <p class="lead">
+              개발 중인 Android APK를 버전별로 내려받는 공식 테스트 페이지입니다.
+            </p>
+          </div>
+
+          <aside class="latest-panel" aria-labelledby="latest-title">
+            <div class="panel-heading">
+              <span class="status-pill" id="latest-kind">Loading</span>
+              <span class="muted" id="last-updated">Release 목록 확인 중</span>
+            </div>
+            <h2 id="latest-title">최신 APK</h2>
+            <p class="version-name" id="latest-version">불러오는 중</p>
+            <dl class="build-meta">
+              <div>
+                <dt>파일</dt>
+                <dd id="latest-file">-</dd>
+              </div>
+              <div>
+                <dt>크기</dt>
+                <dd id="latest-size">-</dd>
+              </div>
+              <div>
+                <dt>SHA256</dt>
+                <dd id="latest-sha">-</dd>
+              </div>
+            </dl>
+            <div class="button-row">
+              <a class="primary-button disabled" id="latest-download" href="#" aria-disabled="true">
+                APK 다운로드
+              </a>
+              <button class="icon-button" id="copy-latest" type="button" disabled aria-label="최신 APK 링크 복사">
+                Copy
+              </button>
+            </div>
+            <p class="microcopy" id="download-hint">GitHub Release에서 APK asset을 찾고 있습니다.</p>
+          </aside>
+        </section>
+
+        <section class="content-grid" aria-label="Download details">
+          <div class="release-section">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Archive</p>
+                <h2>버전 목록</h2>
+              </div>
+              <button class="ghost-button" id="refresh" type="button">새로고침</button>
+            </div>
+            <div class="release-list" id="release-list" aria-live="polite">
+              <div class="empty-state">GitHub Releases를 불러오고 있습니다.</div>
+            </div>
+          </div>
+
+          <aside class="guide-section" aria-labelledby="guide-title">
+            <p class="eyebrow">Install</p>
+            <h2 id="guide-title">설치 안내</h2>
+            <img class="guide-art" src="./assets/tap_guide.png" alt="" width="986" height="1088">
+            <ol class="install-steps">
+              <li>Android 기기에서 APK를 다운로드합니다.</li>
+              <li>브라우저 또는 파일 앱의 알 수 없는 앱 설치를 허용합니다.</li>
+              <li>기존 debug APK와 서명이 다르면 기존 앱을 삭제한 뒤 설치합니다.</li>
+            </ol>
+            <div class="note-box">
+              <strong>Debug build</strong>
+              <span>개발 테스트용 빌드입니다. 정식 배포 전에는 signed release APK로 전환합니다.</span>
+            </div>
+          </aside>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <span>POW POW LOVE Android builds</span>
+        <span id="footer-status">Release 목록 준비 중</span>
+      </footer>
+    </div>
+
+    <noscript>
+      <div class="noscript">
+        JavaScript가 꺼져 있으면 버전 목록을 불러올 수 없습니다.
+        <a href="https://github.com/badarang/powpowlove-downloads/releases">GitHub Releases</a>에서 APK를 다운로드하세요.
+      </div>
+    </noscript>
+    <script src="./app.js" defer></script>
+  </body>
+</html>
