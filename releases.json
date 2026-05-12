@@ -1,5 +1,19 @@
 [
   {
+    "version": "v0.1.0-dev.20260512.2204",
+    "title": "POW POW LOVE v0.1.0-dev.20260512.2204 dev debug",
+    "prerelease": true,
+    "publishedAt": "2026-05-12T13:12:35.368Z",
+    "buildType": "debug",
+    "commit": "cb4d4ac26b1640e5d4ae2465a8b417ca01f74c65",
+    "sha256": "e6169de31b9e8d70d17ac7be19140faaf389af441c2f70bf1ae39f7c41e90717",
+    "apkName": "powpowlove-v0.1.0-dev.20260512.2204-debug.apk",
+    "apkUrl": "https://github.com/thswldns77/powpowlove-downloads/releases/download/v0.1.0-dev.20260512.2204/powpowlove-v0.1.0-dev.20260512.2204-debug.apk",
+    "releaseUrl": "https://github.com/thswldns77/powpowlove-downloads/releases/tag/v0.1.0-dev.20260512.2204",
+    "size": 87117438,
+    "downloadCount": null
+  },
+  {
     "version": "v0.1.0-dev.20260512",
     "title": "POW POW LOVE v0.1.0 dev debug",
     "prerelease": true,
