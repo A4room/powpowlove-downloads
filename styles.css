@@ -43,6 +43,7 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
+  overflow-x: hidden;
   color: var(--ink);
   background:
     linear-gradient(90deg, rgba(21, 22, 17, 0.055) 0 1px, transparent 1px 100%),
@@ -128,6 +129,10 @@ a {
   background: #fffdf1;
   padding: 0 12px;
   font-weight: 850;
+}
+
+.dev-fab {
+  display: none;
 }
 
 .ghost-button,
@@ -261,13 +266,13 @@ h2 {
   justify-content: center;
   align-items: end;
   min-width: 0;
-  min-height: 300px;
+  min-height: 340px;
 }
 
 .moai-stage {
   position: relative;
   width: min(100%, 360px);
-  height: 150px;
+  height: 330px;
   overflow: hidden;
 }
 
@@ -617,17 +622,16 @@ h2 {
   }
 
   .hero-art {
-    min-height: 360px;
+    min-height: 350px;
   }
 }
 
 @media (max-width: 680px) {
   .page-shell {
-    width: min(100% - 24px, 700px);
-    padding-top: 12px;
+    width: min(100% - 16px, 700px);
+    padding-top: 8px;
   }
 
-  .site-header,
   .site-footer,
   .panel-heading,
   .section-heading,
@@ -636,9 +640,32 @@ h2 {
     flex-direction: column;
   }
 
+  .site-header {
+    min-height: 0;
+    margin-bottom: 4px;
+  }
+
+  .brand {
+    width: min(142px, 42vw);
+  }
+
   .dev-gate {
-    width: min(100%, 330px);
+    position: fixed;
+    right: 10px;
+    bottom: 66px;
+    z-index: 20;
+    display: none;
+    width: min(calc(100% - 20px), 320px);
     grid-template-columns: 1fr;
+    padding: 12px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: #fffdf1;
+    box-shadow: var(--shadow);
+  }
+
+  .dev-gate.is-open {
+    display: grid;
   }
 
   .dev-gate > * {
@@ -658,13 +685,90 @@ h2 {
     width: 100%;
   }
 
+  .dev-fab {
+    position: fixed !important;
+    right: 12px;
+    bottom: 12px;
+    z-index: 999;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border: 2px solid var(--ink);
+    border-radius: 50%;
+    background: var(--stone-dark);
+    color: #fffdf1;
+    box-shadow: 0 5px 0 var(--ink);
+    font-size: 0.78rem;
+    font-weight: 950;
+    cursor: pointer;
+  }
+
+  .dev-fab[aria-expanded="true"] {
+    background: var(--gold);
+    color: var(--ink);
+  }
+
+  .hero {
+    position: relative;
+    display: block;
+    padding: 4px 0 10px;
+  }
+
+  .hero-copy .eyebrow {
+    margin-bottom: 6px;
+    font-size: 0.68rem;
+  }
+
+  h1 {
+    margin-bottom: 8px;
+    font-size: clamp(2rem, 9.4vw, 2.5rem);
+    line-height: 0.95;
+    -webkit-text-stroke-width: 1px;
+    text-shadow:
+      1.5px 0 0 #fffdf1,
+      -1.5px 0 0 #fffdf1,
+      0 1.5px 0 #fffdf1,
+      0 -1.5px 0 #fffdf1,
+      2px 3px 0 rgba(21, 22, 17, 0.12);
+  }
+
+  .lead {
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+    line-height: 1.35;
+  }
+
+  .channel-tabs {
+    gap: 8px;
+  }
+
+  .channel-tab {
+    min-width: 92px;
+    min-height: 38px;
+  }
+
   .hero-art {
-    justify-content: flex-start;
-    min-height: 150px;
+    position: absolute;
+    top: -126px;
+    right: auto;
+    left: calc(100vw - 300px);
+    display: block;
+    width: 160px;
+    min-height: 160px;
+    height: 160px;
+    overflow: hidden;
   }
 
   .moai-stage {
-    width: min(100%, 300px);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 300px;
+    height: 330px;
+    transform: scale(0.48);
+    transform-origin: top left;
   }
 
   .latest-panel,

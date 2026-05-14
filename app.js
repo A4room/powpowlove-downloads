@@ -35,6 +35,7 @@ const els = {
   devLink: document.querySelector("#dev-link"),
   devGate: document.querySelector("#dev-gate"),
   devKey: document.querySelector("#dev-key"),
+  devFab: document.querySelector("#dev-fab"),
 };
 
 function initMoaiStage() {
@@ -46,7 +47,7 @@ function initMoaiStage() {
   const P = {
     w: 72,
     h: 72,
-    x: 340,
+    x: 0,
     y: 0,
     vx: -330,
     vy: 0,
@@ -69,8 +70,9 @@ function initMoaiStage() {
     missedSlamLandingLagDuration: 0.2,
   };
 
-  const groundY = 44;
+  const groundY = 178;
   const dust = [];
+  P.x = stage.clientWidth - P.w * 0.35;
 
   function rand(min, max) {
     return min + Math.random() * (max - min);
@@ -101,7 +103,7 @@ function initMoaiStage() {
     P.vy = -P.jumpForce;
     P.grounded = false;
     P.canDoubleJump = true;
-    spawnDust(P.x + P.w * 0.5, groundY + P.h * 0.52, 3, 0.9, 1);
+    spawnDust(P.x + P.w * 0.5, groundY + P.h * 0.9, 3, 0.9, 1);
   }
 
   function startSlamAttack() {
@@ -195,9 +197,9 @@ function initMoaiStage() {
       if (!P.wasGrounded) {
         if (wasSlam) {
           P.landingLagTimer = P.missedSlamLandingLagDuration;
-          spawnDust(P.x + P.w * 0.5, groundY + P.h * 0.52, 7, 1.35, 1);
+          spawnDust(P.x + P.w * 0.5, groundY + P.h * 0.9, 7, 1.35, 1);
         } else {
-          spawnDust(P.x + P.w * 0.5, groundY + P.h * 0.52, 4, 1, 1);
+          spawnDust(P.x + P.w * 0.5, groundY + P.h * 0.9, 4, 1, 1);
         }
       }
     } else {
@@ -205,7 +207,7 @@ function initMoaiStage() {
     }
 
     if (P.x + P.w < -20) {
-      P.x = stage.clientWidth + 20;
+      P.x = stage.clientWidth - P.w * 0.35;
     }
 
     updateDust(dt);
@@ -544,6 +546,11 @@ async function copyLatestLink() {
 
 els.refresh.addEventListener("click", loadReleases);
 els.copyLatest.addEventListener("click", copyLatestLink);
+els.devFab?.addEventListener("click", () => {
+  const isOpen = els.devGate.classList.toggle("is-open");
+  els.devFab.setAttribute("aria-expanded", String(isOpen));
+  if (isOpen) els.devKey.focus();
+});
 els.devGate.addEventListener("submit", async (event) => {
   event.preventDefault();
   const key = els.devKey.value.trim();
@@ -557,7 +564,15 @@ els.devGate.addEventListener("submit", async (event) => {
   currentChannel = "dev";
   window.history.replaceState({}, "", `${window.location.pathname}?channel=dev`);
   els.devKey.value = "";
+  els.devGate.classList.remove("is-open");
+  els.devFab?.setAttribute("aria-expanded", "false");
   loadReleases();
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key !== "Escape") return;
+  els.devGate.classList.remove("is-open");
+  els.devFab?.setAttribute("aria-expanded", "false");
 });
 
 chooseInitialChannel().then((channel) => {
