@@ -37,6 +37,195 @@ const els = {
   devKey: document.querySelector("#dev-key"),
 };
 
+function initMoaiStage() {
+  const stage = document.querySelector("#moaiStage");
+  const moai = document.querySelector("#moai");
+  const dustLayer = document.querySelector("#dustLayer");
+  if (!stage || !moai || !dustLayer) return;
+
+  const P = {
+    w: 72,
+    h: 72,
+    x: 340,
+    y: 0,
+    vx: -330,
+    vy: 0,
+    grounded: true,
+    wasGrounded: true,
+    canDoubleJump: true,
+    slamming: false,
+    slamSpinning: false,
+    spinTimer: 0,
+    spinAngle: 0,
+    landingLagTimer: 0,
+    nextActionTimer: 0.35,
+
+    moveSpeed: 330,
+    gravity: 2760,
+    jumpForce: 986,
+    slamForce: 3840,
+    slamGravity: 25200,
+    spinDuration: 0.25,
+    missedSlamLandingLagDuration: 0.2,
+  };
+
+  const groundY = 44;
+  const dust = [];
+
+  function rand(min, max) {
+    return min + Math.random() * (max - min);
+  }
+
+  function spawnDust(x, y, count = 4, scale = 1, dir = 1) {
+    for (let i = 0; i < count; i += 1) {
+      const el = document.createElement("i");
+      el.className = "dust";
+      dustLayer.appendChild(el);
+
+      dust.push({
+        el,
+        x: x + rand(-5, 5) * scale,
+        y: y + rand(-2, 3) * scale,
+        vx: dir * rand(90, 190) * scale,
+        vy: -rand(32, 92) * scale,
+        life: 0.5,
+        maxLife: 0.5,
+        size: rand(5, 11) * scale,
+        angle: rand(0, Math.PI * 2),
+        spin: rand(-1.6, 1.6),
+      });
+    }
+  }
+
+  function performJump() {
+    P.vy = -P.jumpForce;
+    P.grounded = false;
+    P.canDoubleJump = true;
+    spawnDust(P.x + P.w * 0.5, groundY + P.h * 0.52, 3, 0.9, 1);
+  }
+
+  function startSlamAttack() {
+    if (P.slamming) return;
+
+    P.slamming = true;
+    P.slamSpinning = true;
+    P.canDoubleJump = false;
+    P.vx = 0;
+    P.vy = 0;
+    P.spinTimer = P.spinDuration;
+    P.spinAngle = 0;
+  }
+
+  function pressAction() {
+    if (P.slamming || P.landingLagTimer > 0) return;
+
+    if (P.grounded) {
+      performJump();
+    } else if (P.canDoubleJump) {
+      startSlamAttack();
+    }
+  }
+
+  function updateDust(dt) {
+    for (let i = dust.length - 1; i >= 0; i -= 1) {
+      const d = dust[i];
+      d.life -= dt;
+      d.x += d.vx * dt;
+      d.y += d.vy * dt;
+      d.vx *= 1 - Math.min(1, dt * 4);
+      d.vy += 420 * dt;
+      d.angle += d.spin * dt;
+
+      if (d.life <= 0) {
+        d.el.remove();
+        dust.splice(i, 1);
+        continue;
+      }
+
+      const t = d.life / d.maxLife;
+      d.el.style.left = `${d.x}px`;
+      d.el.style.top = `${d.y}px`;
+      d.el.style.setProperty("--s", `${d.size}px`);
+      d.el.style.setProperty("--a", `${Math.min(1, t * 1.7) * 0.82}`);
+      d.el.style.setProperty("--r", `${d.angle}rad`);
+    }
+  }
+
+  function update(dt) {
+    P.wasGrounded = P.grounded;
+
+    P.nextActionTimer -= dt;
+    if (P.nextActionTimer <= 0) {
+      pressAction();
+      P.nextActionTimer = P.grounded ? rand(0.35, 0.8) : rand(0.16, 0.32);
+    }
+
+    if (P.landingLagTimer > 0) {
+      P.landingLagTimer = Math.max(0, P.landingLagTimer - dt);
+      P.vx = 0;
+    }
+
+    if (P.slamSpinning) {
+      P.spinTimer = Math.max(0, P.spinTimer - dt);
+      const progress = 1 - P.spinTimer / P.spinDuration;
+      P.spinAngle = -Math.PI * 2 * progress;
+      P.vx = 0;
+      P.vy = 0;
+      if (P.spinTimer <= 0) P.slamSpinning = false;
+    } else if (P.slamming) {
+      P.vx = 0;
+      P.vy = Math.min(P.vy + P.slamGravity * dt, P.slamForce);
+    } else {
+      P.vx = P.landingLagTimer > 0 ? 0 : -P.moveSpeed;
+      P.vy += P.gravity * dt;
+    }
+
+    P.x += P.vx * dt;
+    P.y += P.vy * dt;
+
+    if (P.y >= 0) {
+      const wasSlam = P.slamming || P.slamSpinning;
+      P.y = 0;
+      P.vy = 0;
+      P.grounded = true;
+      P.slamming = false;
+      P.slamSpinning = false;
+      P.canDoubleJump = true;
+
+      if (!P.wasGrounded) {
+        if (wasSlam) {
+          P.landingLagTimer = P.missedSlamLandingLagDuration;
+          spawnDust(P.x + P.w * 0.5, groundY + P.h * 0.52, 7, 1.35, 1);
+        } else {
+          spawnDust(P.x + P.w * 0.5, groundY + P.h * 0.52, 4, 1, 1);
+        }
+      }
+    } else {
+      P.grounded = false;
+    }
+
+    if (P.x + P.w < -20) {
+      P.x = stage.clientWidth + 20;
+    }
+
+    updateDust(dt);
+
+    const slamSquash = P.slamming ? "scale(1.18, 0.92)" : "";
+    moai.style.transform =
+      `translate(${P.x}px, ${groundY + P.y}px) rotate(${P.spinAngle}rad) ${slamSquash}`;
+  }
+
+  let last = performance.now();
+  function frame(now) {
+    const dt = Math.min(0.033, (now - last) / 1000);
+    last = now;
+    update(dt);
+    requestAnimationFrame(frame);
+  }
+
+  requestAnimationFrame(frame);
+}
+
 let latestDownloadUrl = "";
 let currentChannel = "prod";
 let activeDevKey = "";
@@ -375,3 +564,4 @@ chooseInitialChannel().then((channel) => {
   currentChannel = channel;
   loadReleases();
 });
+initMoaiStage();
