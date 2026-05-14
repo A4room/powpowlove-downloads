@@ -1,5 +1,5 @@
 const LOCAL_RELEASES_URL = "./releases.json";
-const DEV_RELEASES_URL = "./dev-releases.json?v=20260514.2341";
+const DEV_RELEASES_URL = "./dev-releases.json?v=20260515.0044";
 const DEV_KEY_HASH = "eb4080bca2d2203c33085dff2f7b31436928f5902ea2d5c6e0464d2a98b352d4";
 
 const CHANNELS = {
