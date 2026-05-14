@@ -276,10 +276,6 @@ h2 {
   overflow: hidden;
 }
 
-.moai-stage-secondary {
-  display: none;
-}
-
 .platform {
   position: absolute;
   left: 26px;
@@ -759,7 +755,7 @@ h2 {
     right: -8px;
     left: auto;
     display: block;
-    width: 244px;
+    width: min(246px, calc(100vw - 154px));
     min-height: 160px;
     height: 160px;
     overflow: hidden;
@@ -769,16 +765,15 @@ h2 {
     position: absolute;
     top: 0;
     left: 0;
-    width: 300px;
+    width: 560px;
     height: 330px;
     transform: scale(0.4);
     transform-origin: top left;
   }
 
-  .moai-stage-secondary {
-    display: block;
-    top: 38px;
-    left: 118px;
+  .moai-stage .platform {
+    left: 18px;
+    right: 18px;
   }
 
   .latest-panel,
