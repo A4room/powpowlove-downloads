@@ -4,48 +4,71 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light">
-    <title>POW POW LOVE Android Builds</title>
+    <title>모아이는내려찍고싶다 | MoaiWannaSlam Android Builds</title>
     <meta
       name="description"
-      content="POW POW LOVE Android development APK download page."
+      content="모아이는내려찍고싶다(MoaiWannaSlam) Android APK download page."
     >
     <link rel="preload" href="./assets/story_title_logo.png" as="image">
     <link rel="stylesheet" href="./styles.css">
   </head>
   <body>
     <div class="page-shell">
-      <header class="site-header" aria-label="POW POW LOVE Android builds">
-        <a class="brand" href="./" aria-label="POW POW LOVE Android builds home">
-          <img src="./assets/story_title_logo.png" alt="POW POW LOVE" width="1577" height="997">
+      <header class="site-header" aria-label="MoaiWannaSlam Android builds">
+        <a class="brand" href="./" aria-label="MoaiWannaSlam home">
+          <img src="./assets/story_title_logo.png" alt="모아이는내려찍고싶다" width="1577" height="997">
         </a>
-        <div class="header-actions">
-          <a class="ghost-link" href="https://github.com/thswldns77/powpowlove-downloads/releases" target="_blank" rel="noreferrer">
-            GitHub Releases
-          </a>
-        </div>
+        <form class="dev-gate" id="dev-gate" autocomplete="off">
+          <label for="dev-key">Dev access</label>
+          <input id="dev-key" name="key" type="password" inputmode="text" placeholder="key">
+          <button class="ghost-button" type="submit">열기</button>
+        </form>
       </header>
 
       <main>
         <section class="hero" aria-labelledby="page-title">
           <div class="hero-copy">
-            <p class="eyebrow">Android development builds</p>
-            <h1 id="page-title">POW POW LOVE</h1>
+            <p class="eyebrow">Android build portal</p>
+            <h1 id="page-title">
+              <span>모아이는</span>
+              <span>내려찍고싶다</span>
+            </h1>
             <p class="lead">
-              개발 중인 Android APK를 버전별로 내려받는 공식 테스트 페이지입니다.
+              바위처럼 단단하고, 한 번 누르면 바로 내려찍는 모아이 액션 게임의 공식 Android 빌드 페이지입니다.
             </p>
+            <div class="channel-tabs" aria-label="Build channel">
+              <a class="channel-tab active" id="prod-link" href="./">Prod</a>
+              <a class="channel-tab locked" id="dev-link" href="?channel=dev">Dev</a>
+            </div>
           </div>
 
+          <div class="hero-art" aria-hidden="true">
+            <img class="title-logo" src="./assets/story_title_logo.png" alt="" width="1577" height="997">
+            <div class="moai-stage">
+              <div class="pixel-sun"></div>
+              <div class="moai-idol">
+                <span class="moai-brow"></span>
+                <span class="moai-eye"></span>
+                <span class="moai-nose"></span>
+                <span class="moai-mouth"></span>
+              </div>
+              <div class="ground"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="build-board" aria-label="Build download board">
           <aside class="latest-panel" aria-labelledby="latest-title">
             <div class="panel-heading">
-              <span class="status-pill" id="latest-kind">Loading</span>
-              <span class="muted" id="last-updated">Release 목록 확인 중</span>
+              <span class="status-pill" id="latest-kind">PROD</span>
+              <span class="muted" id="last-updated">빌드 목록 확인 중</span>
             </div>
-            <h2 id="latest-title">최신 APK</h2>
+            <h2 id="latest-title">최신 빌드</h2>
             <p class="version-name" id="latest-version">불러오는 중</p>
             <dl class="build-meta">
               <div>
-                <dt>파일</dt>
-                <dd id="latest-file">-</dd>
+                <dt>채널</dt>
+                <dd id="latest-channel">-</dd>
               </div>
               <div>
                 <dt>크기</dt>
@@ -64,23 +87,21 @@
                 Copy
               </button>
             </div>
-            <p class="microcopy" id="download-hint">GitHub Release에서 APK asset을 찾고 있습니다.</p>
+            <p class="microcopy" id="download-hint">공개 제출용 prod APK만 기본 화면에 표시됩니다.</p>
           </aside>
-        </section>
 
-        <section class="content-grid" aria-label="Download details">
-          <div class="release-section">
+          <section class="release-section" aria-labelledby="archive-title">
             <div class="section-heading">
               <div>
-                <p class="eyebrow">Archive</p>
-                <h2>버전 목록</h2>
+                <p class="eyebrow" id="archive-channel">Prod</p>
+                <h2 id="archive-title">버전 목록</h2>
               </div>
               <button class="ghost-button" id="refresh" type="button">새로고침</button>
             </div>
             <div class="release-list" id="release-list" aria-live="polite">
-              <div class="empty-state">GitHub Releases를 불러오고 있습니다.</div>
+              <div class="empty-state">빌드 목록을 불러오고 있습니다.</div>
             </div>
-          </div>
+          </section>
 
           <aside class="guide-section" aria-labelledby="guide-title">
             <p class="eyebrow">Install</p>
@@ -89,26 +110,25 @@
             <ol class="install-steps">
               <li>Android 기기에서 APK를 다운로드합니다.</li>
               <li>브라우저 또는 파일 앱의 알 수 없는 앱 설치를 허용합니다.</li>
-              <li>기존 debug APK와 서명이 다르면 기존 앱을 삭제한 뒤 설치합니다.</li>
+              <li>기존 테스트 앱과 서명이 다르면 기존 앱을 삭제한 뒤 설치합니다.</li>
             </ol>
             <div class="note-box">
-              <strong>Debug build</strong>
-              <span>개발 테스트용 빌드입니다. 정식 배포 전에는 signed release APK로 전환합니다.</span>
+              <strong>Dev build access</strong>
+              <span>Dev APK는 공개 제출 화면에서 숨겨집니다. 정적 사이트는 서버 인증을 제공하지 않으므로 실제 제한 배포는 비공개 저장소나 인증된 파일 호스트를 사용해야 합니다.</span>
             </div>
           </aside>
         </section>
       </main>
 
       <footer class="site-footer">
-        <span>POW POW LOVE Android builds</span>
-        <span id="footer-status">Release 목록 준비 중</span>
+        <span>MoaiWannaSlam Android builds</span>
+        <span id="footer-status">빌드 목록 준비 중</span>
       </footer>
     </div>
 
     <noscript>
       <div class="noscript">
         JavaScript가 꺼져 있으면 버전 목록을 불러올 수 없습니다.
-        <a href="https://github.com/thswldns77/powpowlove-downloads/releases">GitHub Releases</a>에서 APK를 다운로드하세요.
       </div>
     </noscript>
     <script src="./app.js" defer></script>

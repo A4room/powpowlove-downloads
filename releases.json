@@ -1,7 +1,9 @@
 [
   {
     "version": "v0.1.1-dev.20260513.2209",
-    "title": "POW POW LOVE v0.1.1-dev.20260513.2209 dev debug",
+    "title": "MoaiWannaSlam v0.1.1-dev.20260513.2209 dev debug",
+    "displayName": "MoaiWannaSlam internal Android APK",
+    "channel": "dev",
     "prerelease": true,
     "publishedAt": "2026-05-13T13:11:20.433Z",
     "buildType": "debug",
@@ -15,7 +17,9 @@
   },
   {
     "version": "v0.1.1-dev.20260513.2141",
-    "title": "POW POW LOVE v0.1.1-dev.20260513.2141 dev debug",
+    "title": "MoaiWannaSlam v0.1.1-dev.20260513.2141 dev debug",
+    "displayName": "MoaiWannaSlam internal Android APK",
+    "channel": "dev",
     "prerelease": true,
     "publishedAt": "2026-05-13T12:42:55.138Z",
     "buildType": "debug",
@@ -29,7 +33,9 @@
   },
   {
     "version": "v0.1.0-dev.20260513.1217",
-    "title": "POW POW LOVE v0.1.0-dev.20260513.1217 dev debug",
+    "title": "MoaiWannaSlam v0.1.0-dev.20260513.1217 dev debug",
+    "displayName": "MoaiWannaSlam internal Android APK",
+    "channel": "dev",
     "prerelease": true,
     "publishedAt": "2026-05-13T03:17:28Z",
     "buildType": "debug",
@@ -43,7 +49,9 @@
   },
   {
     "version": "v0.1.0-dev.20260513.1151",
-    "title": "POW POW LOVE v0.1.0-dev.20260513.1151 dev debug",
+    "title": "MoaiWannaSlam v0.1.0-dev.20260513.1151 dev debug",
+    "displayName": "MoaiWannaSlam internal Android APK",
+    "channel": "dev",
     "prerelease": true,
     "publishedAt": "2026-05-13T02:52:10Z",
     "buildType": "debug",
@@ -57,7 +65,9 @@
   },
   {
     "version": "v0.1.0-dev.20260513.1101",
-    "title": "POW POW LOVE v0.1.0-dev.20260513.1101 dev debug",
+    "title": "MoaiWannaSlam v0.1.0-dev.20260513.1101 dev debug",
+    "displayName": "MoaiWannaSlam internal Android APK",
+    "channel": "dev",
     "prerelease": true,
     "publishedAt": "2026-05-13T02:02:14Z",
     "buildType": "debug",
@@ -71,7 +81,9 @@
   },
   {
     "version": "v0.1.0-dev.20260512.2345",
-    "title": "POW POW LOVE v0.1.0-dev.20260512.2345 dev debug",
+    "title": "MoaiWannaSlam v0.1.0-dev.20260512.2345 dev debug",
+    "displayName": "MoaiWannaSlam internal Android APK",
+    "channel": "dev",
     "prerelease": true,
     "publishedAt": "2026-05-12T14:46:07Z",
     "buildType": "debug",
@@ -85,7 +97,9 @@
   },
   {
     "version": "v0.1.0-dev.20260512.2204",
-    "title": "POW POW LOVE v0.1.0-dev.20260512.2204 dev debug",
+    "title": "MoaiWannaSlam v0.1.0-dev.20260512.2204 dev debug",
+    "displayName": "MoaiWannaSlam internal Android APK",
+    "channel": "dev",
     "prerelease": true,
     "publishedAt": "2026-05-12T13:12:35.368Z",
     "buildType": "debug",
@@ -99,7 +113,9 @@
   },
   {
     "version": "v0.1.0-dev.20260512",
-    "title": "POW POW LOVE v0.1.0 dev debug",
+    "title": "MoaiWannaSlam v0.1.0 dev debug",
+    "displayName": "MoaiWannaSlam internal Android APK",
+    "channel": "dev",
     "prerelease": true,
     "publishedAt": "2026-05-12T07:31:29Z",
     "buildType": "debug",

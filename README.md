@@ -1,6 +1,5 @@
-# POW POW LOVE Downloads
+# MoaiWannaSlam Downloads
 
-Static Android APK download page for POW POW LOVE development builds.
+Static Android APK download page for `모아이는내려찍고싶다` (`MoaiWannaSlam`).
 
-Site files are intentionally small and public. Game source code stays in the
-private `badarang/powpowlove` repository.
+The public page shows only `prod` records from `releases.json`. Internal `dev` records are hidden unless the dev key is entered, but real access control for dev APKs requires hosting those assets somewhere private or authenticated.
