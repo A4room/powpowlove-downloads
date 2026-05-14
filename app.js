@@ -1,4 +1,5 @@
 const LOCAL_RELEASES_URL = "./releases.json";
+const DEV_RELEASES_URL = "./dev-releases.json";
 const DEV_KEY_HASH = "509587035173baef19d5d3778d090d1fb898c546ed760a5a9c2e0ba78ac9632a";
 
 const CHANNELS = {
@@ -38,6 +39,7 @@ const els = {
 
 let latestDownloadUrl = "";
 let currentChannel = "prod";
+let activeDevKey = "";
 
 function getQuery() {
   return new URLSearchParams(window.location.search);
@@ -47,6 +49,46 @@ async function sha256(value) {
   const bytes = new TextEncoder().encode(value);
   const digest = await crypto.subtle.digest("SHA-256", bytes);
   return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("");
+}
+
+function decodeBase64(value) {
+  const binary = atob(value);
+  return Uint8Array.from(binary, (char) => char.charCodeAt(0));
+}
+
+async function deriveDevCryptoKey(passphrase, salt, iterations) {
+  const baseKey = await crypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(passphrase),
+    "PBKDF2",
+    false,
+    ["deriveKey"]
+  );
+  return crypto.subtle.deriveKey(
+    {
+      name: "PBKDF2",
+      salt,
+      iterations,
+      hash: "SHA-256",
+    },
+    baseKey,
+    { name: "AES-GCM", length: 256 },
+    false,
+    ["decrypt"]
+  );
+}
+
+async function decryptDevManifest(envelope, passphrase) {
+  const salt = decodeBase64(envelope.salt);
+  const iv = decodeBase64(envelope.iv);
+  const tag = decodeBase64(envelope.tag);
+  const data = decodeBase64(envelope.data);
+  const payload = new Uint8Array(data.length + tag.length);
+  payload.set(data);
+  payload.set(tag, data.length);
+  const key = await deriveDevCryptoKey(passphrase, salt, envelope.iterations);
+  const decrypted = await crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, payload);
+  return JSON.parse(new TextDecoder().decode(decrypted));
 }
 
 async function isDevUnlocked() {
@@ -62,6 +104,7 @@ async function isDevUnlocked() {
     const clean = `${window.location.pathname}?${params.toString()}`.replace(/\?$/, "");
     window.history.replaceState({}, "", clean);
   }
+  if (ok) activeDevKey = key;
   return ok;
 }
 
@@ -266,11 +309,18 @@ async function loadReleases() {
   setText(els.footerStatus, `${CHANNELS[currentChannel].name} 목록 확인 중`);
 
   try {
-    const response = await fetch(LOCAL_RELEASES_URL, { cache: "no-store" });
+    const response = await fetch(
+      currentChannel === "dev" ? DEV_RELEASES_URL : LOCAL_RELEASES_URL,
+      { cache: "no-store" }
+    );
     if (!response.ok) {
       throw new Error(`manifest ${response.status}`);
     }
-    const entries = normalizeReleases(manifestToReleases(await response.json()), currentChannel);
+    const manifest = await response.json();
+    const records = currentChannel === "dev"
+      ? await decryptDevManifest(manifest, activeDevKey)
+      : manifest;
+    const entries = normalizeReleases(manifestToReleases(records), currentChannel);
     renderReleaseList(entries);
     setText(els.footerStatus, `${CHANNELS[currentChannel].name} APK ${entries.length}개 표시 중`);
   } catch (error) {
@@ -311,6 +361,7 @@ els.devGate.addEventListener("submit", async (event) => {
     return;
   }
   sessionStorage.setItem("moai-dev-key", key);
+  activeDevKey = key;
   currentChannel = "dev";
   window.history.replaceState({}, "", `${window.location.pathname}?channel=dev`);
   els.devKey.value = "";
