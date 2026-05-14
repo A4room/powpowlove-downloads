@@ -555,8 +555,35 @@ async function copyLatestLink() {
   }
 }
 
+function spawnDownloadVfx(event) {
+  const button = event.currentTarget;
+  if (button.classList.contains("disabled") || button.getAttribute("aria-disabled") === "true") return;
+
+  const rect = button.getBoundingClientRect();
+  const originX = event.clientX || rect.left + rect.width * 0.5;
+  const originY = event.clientY || rect.top + rect.height * 0.5;
+  const colors = ["#ffc73a", "#fff1a7", "#e24731", "#79b32f"];
+
+  for (let i = 0; i < 14; i += 1) {
+    const spark = document.createElement("i");
+    spark.className = "download-spark";
+    const angle = (Math.PI * 2 * i) / 14 + Math.random() * 0.35;
+    const distance = 24 + Math.random() * 46;
+    spark.style.setProperty("--x", `${originX}px`);
+    spark.style.setProperty("--y", `${originY}px`);
+    spark.style.setProperty("--dx", `${Math.cos(angle) * distance}px`);
+    spark.style.setProperty("--dy", `${Math.sin(angle) * distance}px`);
+    spark.style.setProperty("--s", `${5 + Math.random() * 7}px`);
+    spark.style.setProperty("--r", `${Math.random() * 180}deg`);
+    spark.style.setProperty("--c", colors[i % colors.length]);
+    document.body.appendChild(spark);
+    spark.addEventListener("animationend", () => spark.remove(), { once: true });
+  }
+}
+
 els.refresh.addEventListener("click", loadReleases);
 els.copyLatest.addEventListener("click", copyLatestLink);
+els.latestDownload.addEventListener("click", spawnDownloadVfx);
 els.devFab?.addEventListener("click", () => {
   const isOpen = els.devGate.classList.toggle("is-open");
   els.devFab.setAttribute("aria-expanded", String(isOpen));
