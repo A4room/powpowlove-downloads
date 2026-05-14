@@ -261,7 +261,10 @@ function createReleaseItem(entry, isLatest) {
   releaseLink.rel = "noreferrer";
   releaseLink.textContent = "Release note";
 
-  actions.append(download, releaseLink);
+  actions.append(download);
+  if (release.html_url) {
+    actions.append(releaseLink);
+  }
   item.append(top, grid, actions);
   return item;
 }
