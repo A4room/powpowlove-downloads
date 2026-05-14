@@ -38,10 +38,9 @@ const els = {
   devFab: document.querySelector("#dev-fab"),
 };
 
-function initMoaiStage() {
-  const stage = document.querySelector("#moaiStage");
-  const moai = document.querySelector("#moai");
-  const dustLayer = document.querySelector("#dustLayer");
+function initMoaiStage(stage, stageIndex = 0) {
+  const moai = stage.querySelector(".moai");
+  const dustLayer = stage.querySelector(".dust-layer");
   if (!stage || !moai || !dustLayer) return;
 
   const P = {
@@ -59,9 +58,9 @@ function initMoaiStage() {
     spinTimer: 0,
     spinAngle: 0,
     landingLagTimer: 0,
-    nextActionTimer: 0.35,
+    nextActionTimer: 0.35 + stageIndex * 0.22,
 
-    moveSpeed: 330,
+    moveSpeed: 310 + stageIndex * 40,
     gravity: 2760,
     jumpForce: 986,
     slamForce: 3840,
@@ -72,7 +71,7 @@ function initMoaiStage() {
 
   const groundY = 178;
   const dust = [];
-  P.x = stage.clientWidth - P.w * 0.35;
+  P.x = stage.clientWidth - P.w * (0.35 + stageIndex * 1.45);
 
   function rand(min, max) {
     return min + Math.random() * (max - min);
@@ -212,9 +211,15 @@ function initMoaiStage() {
 
     updateDust(dt);
 
-    const slamSquash = P.slamming ? "scale(1.18, 0.92)" : "";
+    const verticalStretch = Math.max(-0.18, Math.min(0.18, -P.vy / 5200));
+    const landingSquash = P.landingLagTimer > 0
+      ? Math.sin((P.landingLagTimer / P.missedSlamLandingLagDuration) * Math.PI) * 0.18
+      : 0;
+    const slamSquash = P.slamming ? 0.16 : 0;
+    const scaleX = 1 - verticalStretch + landingSquash + slamSquash;
+    const scaleY = 1 + verticalStretch - landingSquash - slamSquash * 0.55;
     moai.style.transform =
-      `translate(${P.x}px, ${groundY + P.y}px) rotate(${P.spinAngle}rad) ${slamSquash}`;
+      `translate(${P.x}px, ${groundY + P.y}px) rotate(${P.spinAngle}rad) scale(${scaleX}, ${scaleY})`;
   }
 
   let last = performance.now();
@@ -226,6 +231,12 @@ function initMoaiStage() {
   }
 
   requestAnimationFrame(frame);
+}
+
+function initMoaiStages() {
+  document.querySelectorAll(".moai-stage").forEach((stage, index) => {
+    initMoaiStage(stage, index);
+  });
 }
 
 let latestDownloadUrl = "";
@@ -579,4 +590,4 @@ chooseInitialChannel().then((channel) => {
   currentChannel = channel;
   loadReleases();
 });
-initMoaiStage();
+initMoaiStages();

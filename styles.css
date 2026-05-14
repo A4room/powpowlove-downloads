@@ -276,6 +276,10 @@ h2 {
   overflow: hidden;
 }
 
+.moai-stage-secondary {
+  display: none;
+}
+
 .platform {
   position: absolute;
   left: 26px;
@@ -301,7 +305,7 @@ h2 {
   height: 72px;
   left: 0;
   top: 0;
-  transform-origin: 50% 80%;
+  transform-origin: 50% 50%;
   will-change: transform;
 }
 
@@ -751,11 +755,11 @@ h2 {
 
   .hero-art {
     position: absolute;
-    top: -126px;
-    right: auto;
-    left: calc(100vw - 300px);
+    top: -124px;
+    right: -8px;
+    left: auto;
     display: block;
-    width: 160px;
+    width: 244px;
     min-height: 160px;
     height: 160px;
     overflow: hidden;
@@ -767,8 +771,14 @@ h2 {
     left: 0;
     width: 300px;
     height: 330px;
-    transform: scale(0.48);
+    transform: scale(0.4);
     transform-origin: top left;
+  }
+
+  .moai-stage-secondary {
+    display: block;
+    top: 38px;
+    left: 118px;
   }
 
   .latest-panel,
