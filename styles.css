@@ -66,9 +66,9 @@ a {
 }
 
 .page-shell {
-  width: min(1220px, calc(100% - 40px));
+  width: min(1240px, calc(100% - 40px));
   margin: 0 auto;
-  padding: 18px 0 30px;
+  padding: 14px 0 30px;
 }
 
 .site-header,
@@ -83,7 +83,7 @@ a {
 }
 
 .site-header {
-  min-height: 82px;
+  min-height: 76px;
 }
 
 .brand {
@@ -166,14 +166,15 @@ a {
 
 .hero {
   display: grid;
-  grid-template-columns: minmax(0, 0.92fr) minmax(420px, 1.08fr);
-  align-items: center;
-  gap: 34px;
-  padding: 40px 0 30px;
+  grid-template-columns: minmax(380px, 0.78fr) minmax(520px, 1.22fr);
+  align-items: end;
+  gap: 26px;
+  padding: 18px 0 16px;
 }
 
 .hero-copy {
   min-width: 0;
+  padding-bottom: 42px;
 }
 
 .eyebrow {
@@ -201,7 +202,7 @@ h2 {
 h1 {
   max-width: 660px;
   margin-bottom: 18px;
-  font-size: clamp(2.9rem, 5.3vw, 5rem);
+  font-size: clamp(3rem, 4.8vw, 4.72rem);
   line-height: 0.92;
   letter-spacing: 0;
   -webkit-text-stroke: 1.5px #fffdf1;
@@ -266,20 +267,20 @@ h2 {
   justify-content: center;
   align-items: end;
   min-width: 0;
-  min-height: 340px;
+  min-height: 320px;
 }
 
 .moai-stage {
   position: relative;
-  width: min(100%, 360px);
+  width: min(100%, 620px);
   height: 330px;
   overflow: hidden;
 }
 
 .platform {
   position: absolute;
-  left: 26px;
-  right: 36px;
+  left: 34px;
+  right: 28px;
   bottom: 30px;
   height: 54px;
   border: 5px solid var(--ink);
@@ -326,6 +327,7 @@ h2 {
   grid-template-columns: minmax(300px, 400px) minmax(0, 1fr) minmax(270px, 330px);
   gap: 18px;
   align-items: start;
+  margin-top: -4px;
 }
 
 .latest-panel,
