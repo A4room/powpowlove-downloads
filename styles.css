@@ -78,7 +78,6 @@ a {
 }
 
 .brand img,
-.title-logo,
 .guide-art {
   display: block;
   height: auto;
@@ -228,100 +227,101 @@ h2 {
 
 .hero-art {
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 0;
   min-height: 430px;
 }
 
-.title-logo {
+.hero-moai-card {
   position: relative;
-  z-index: 2;
-  width: min(100%, 640px);
-  margin-left: auto;
-  filter: drop-shadow(0 12px 0 rgba(21, 22, 17, 0.12));
-}
-
-.moai-stage {
-  position: absolute;
-  right: 4%;
-  bottom: 0;
-  z-index: 1;
-  width: min(72%, 430px);
-  aspect-ratio: 1.2;
-}
-
-.pixel-sun {
-  position: absolute;
-  top: 16%;
-  right: 6%;
-  width: 62px;
+  width: min(92%, 520px);
   aspect-ratio: 1;
-  border: 5px solid var(--ink);
-  background: var(--gold);
-  box-shadow: 10px 10px 0 rgba(21, 22, 17, 0.18);
-}
-
-.moai-idol {
-  position: absolute;
-  left: 18%;
-  bottom: 16%;
-  width: 42%;
-  height: 72%;
-  border: 6px solid var(--ink);
-  border-radius: 48% 42% 28% 26% / 18% 18% 13% 13%;
+  overflow: hidden;
+  border: 1px solid rgba(21, 22, 17, 0.22);
+  border-radius: 8px;
   background:
-    linear-gradient(100deg, rgba(255, 255, 255, 0.22), transparent 32%),
-    linear-gradient(90deg, #9b9b8f 0 64%, #575a50 64% 100%);
-  box-shadow: 14px 14px 0 var(--stone-dark);
-  transform: rotate(-6deg);
+    radial-gradient(circle at 48% 44%, rgba(255, 255, 255, 0.34), transparent 20%),
+    radial-gradient(circle at 50% 45%, #7c776e 0 28%, #4a4640 58%, #292720 100%);
+  box-shadow:
+    inset 0 0 80px rgba(255, 255, 255, 0.08),
+    0 18px 0 rgba(21, 22, 17, 0.12);
 }
 
-.moai-brow,
+.hero-moai-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.06), transparent 44%),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.18), transparent 35%);
+  pointer-events: none;
+}
+
+.hero-moai {
+  position: absolute;
+  left: 25%;
+  top: 10%;
+  width: 50%;
+  height: 78%;
+  border: 15px solid #17140f;
+  background:
+    linear-gradient(90deg, #f4f3ec 0 52%, #c9bda7 52% 100%);
+  box-shadow:
+    14px 14px 0 rgba(0, 0, 0, 0.28),
+    inset -17px 0 0 rgba(108, 97, 77, 0.22);
+  clip-path: polygon(30% 0, 88% 12%, 100% 88%, 55% 100%, 0 92%, 4% 24%);
+  transform: rotate(7deg);
+}
+
 .moai-eye,
 .moai-nose,
-.moai-mouth {
+.moai-mouth,
+.moai-cheek {
   position: absolute;
   display: block;
-  background: var(--ink);
-}
-
-.moai-brow {
-  top: 28%;
-  left: 27%;
-  width: 48%;
-  height: 7%;
+  background: #090806;
 }
 
 .moai-eye {
-  top: 38%;
-  left: 34%;
-  width: 26%;
-  height: 8%;
+  top: 31%;
+  height: 19%;
+  clip-path: polygon(0 0, 100% 0, 77% 100%, 19% 100%);
+}
+
+.moai-eye-left {
+  left: 7%;
+  width: 36%;
+}
+
+.moai-eye-right {
+  right: 5%;
+  width: 39%;
 }
 
 .moai-nose {
-  top: 42%;
-  left: 54%;
-  width: 17%;
-  height: 25%;
-  transform: skewX(-14deg);
+  top: 32%;
+  left: 36%;
+  width: 25%;
+  height: 42%;
+  clip-path: polygon(34% 0, 68% 5%, 100% 92%, 58% 100%, 0 73%);
 }
 
 .moai-mouth {
-  left: 31%;
-  bottom: 19%;
-  width: 43%;
-  height: 7%;
+  left: 25%;
+  bottom: 21%;
+  width: 48%;
+  height: 13%;
+  transform: rotate(-8deg);
 }
 
-.ground {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  width: 92%;
-  height: 22%;
-  border: 6px solid var(--ink);
-  background:
-    linear-gradient(0deg, var(--earth) 0 60%, var(--grass) 60% 100%);
-  box-shadow: 10px 10px 0 rgba(21, 22, 17, 0.18);
+.moai-cheek {
+  right: 8%;
+  bottom: 25%;
+  width: 15%;
+  height: 28%;
+  transform: rotate(-12deg);
 }
 
 .build-board {
@@ -643,10 +643,6 @@ h2 {
   .hero-art {
     min-height: 360px;
   }
-
-  .title-logo {
-    margin-right: auto;
-  }
 }
 
 @media (max-width: 680px) {
@@ -686,11 +682,13 @@ h2 {
   }
 
   .hero-art {
+    justify-content: flex-start;
     min-height: 300px;
   }
 
-  .moai-stage {
-    width: 82%;
+  .hero-moai-card {
+    width: min(100%, 320px);
+    max-width: calc(100vw - 24px);
   }
 
   .latest-panel,
