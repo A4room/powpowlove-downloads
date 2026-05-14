@@ -1,6 +1,6 @@
 const LOCAL_RELEASES_URL = "./releases.json";
 const DEV_RELEASES_URL = "./dev-releases.json";
-const DEV_KEY_HASH = "509587035173baef19d5d3778d090d1fb898c546ed760a5a9c2e0ba78ac9632a";
+const DEV_KEY_HASH = "eb4080bca2d2203c33085dff2f7b31436928f5902ea2d5c6e0464d2a98b352d4";
 
 const CHANNELS = {
   prod: {
