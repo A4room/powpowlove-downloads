@@ -1,6 +1,12 @@
 const LOCAL_RELEASES_URL = "./releases.json";
 const DEV_RELEASES_URL = "./dev-releases.json?v=20260515.0057";
 const DEV_KEY_HASH = "eb4080bca2d2203c33085dff2f7b31436928f5902ea2d5c6e0464d2a98b352d4";
+const NOTEPAD_SUPABASE_URL = "https://oapdqvpcdjvfiqimzdqv.supabase.co";
+const NOTEPAD_SUPABASE_KEY = "sb_publishable_nWA13mDAwnsBQyBkdqDozQ_RTVH4cup";
+const NOTEPAD_ID = "main";
+const NOTEPAD_SAVE_DELAY_MS = 650;
+const NOTEPAD_POLL_MS = 3500;
+const NOTEPAD_MAX_CHARS = 120000;
 
 const CHANNELS = {
   prod: {
@@ -36,6 +42,11 @@ const els = {
   devGate: document.querySelector("#dev-gate"),
   devKey: document.querySelector("#dev-key"),
   devFab: document.querySelector("#dev-fab"),
+  notepadSection: document.querySelector("#notepad-section"),
+  notepad: document.querySelector("#shared-notepad"),
+  notepadStatus: document.querySelector("#notepad-status"),
+  notepadMeta: document.querySelector("#notepad-meta"),
+  copyNote: document.querySelector("#copy-note"),
 };
 
 function initMoaiStage(stage, stageIndex = 0) {
@@ -242,6 +253,13 @@ function initMoaiStages() {
 let latestDownloadUrl = "";
 let currentChannel = "prod";
 let activeDevKey = "";
+let noteSaveTimer = null;
+let notePollTimer = null;
+let noteSaving = false;
+let noteDirty = false;
+let noteRemoteUpdatedAt = "";
+let noteClientId = "";
+let noteInitialized = false;
 
 function getQuery() {
   return new URLSearchParams(window.location.search);
@@ -506,6 +524,7 @@ function updateChannelChrome() {
   els.prodLink.classList.toggle("active", currentChannel === "prod");
   els.devLink.classList.toggle("active", currentChannel === "dev");
   els.devLink.classList.toggle("locked", currentChannel !== "dev");
+  updateNotepadVisibility();
 }
 
 async function loadReleases() {
@@ -552,6 +571,195 @@ async function copyLatestLink() {
     setText(els.downloadHint, "최신 APK 링크를 복사했습니다.");
   } catch {
     setText(els.downloadHint, latestDownloadUrl);
+  }
+}
+
+function ensureNoteClientId() {
+  const key = "moai.notepad.clientId";
+  try {
+    const current = localStorage.getItem(key);
+    if (current) return current;
+    const next = globalThis.crypto && globalThis.crypto.randomUUID
+      ? globalThis.crypto.randomUUID()
+      : `${Date.now()}-${Math.random()}`;
+    localStorage.setItem(key, next);
+    return next;
+  } catch {
+    return `${Date.now()}-${Math.random()}`;
+  }
+}
+
+function setNoteStatus(text, mode = "") {
+  if (!els.notepadStatus) return;
+  els.notepadStatus.textContent = text;
+  els.notepadStatus.classList.toggle("saving", mode === "saving");
+  els.notepadStatus.classList.toggle("error", mode === "error");
+}
+
+function formatNoteTime(value) {
+  if (!value) return "";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+  return new Intl.DateTimeFormat("ko-KR", {
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  }).format(date);
+}
+
+function updateNoteMeta(prefix, updatedAt = noteRemoteUpdatedAt) {
+  const time = formatNoteTime(updatedAt);
+  setText(els.notepadMeta, time ? `${prefix} ${time}` : prefix);
+}
+
+function normalizeNoteRow(row) {
+  const data = row && typeof row === "object" ? row : {};
+  return {
+    content: typeof data.content === "string" ? data.content : "",
+    updated_at: data.updated_at || "",
+    client_id: data.client_id || "",
+  };
+}
+
+function supabaseHeaders(extra = {}) {
+  return {
+    apikey: NOTEPAD_SUPABASE_KEY,
+    Authorization: `Bearer ${NOTEPAD_SUPABASE_KEY}`,
+    "Content-Type": "application/json",
+    ...extra,
+  };
+}
+
+async function fetchNote() {
+  const url = `${NOTEPAD_SUPABASE_URL}/rest/v1/shared_notepad?id=eq.${encodeURIComponent(NOTEPAD_ID)}&select=content,updated_at,client_id&limit=1`;
+  const response = await fetch(url, {
+    headers: supabaseHeaders(),
+    cache: "no-store",
+  });
+  if (!response.ok) throw new Error(`Supabase ${response.status}`);
+  const rows = await response.json();
+  return normalizeNoteRow(Array.isArray(rows) ? rows[0] : rows);
+}
+
+async function saveNote(content) {
+  const response = await fetch(`${NOTEPAD_SUPABASE_URL}/rest/v1/shared_notepad?on_conflict=id`, {
+    method: "POST",
+    headers: supabaseHeaders({ Prefer: "resolution=merge-duplicates,return=representation" }),
+    body: JSON.stringify({
+      id: NOTEPAD_ID,
+      content,
+      client_id: noteClientId,
+      updated_at: new Date().toISOString(),
+    }),
+  });
+  if (!response.ok) throw new Error(`Supabase ${response.status}`);
+  const rows = await response.json();
+  return normalizeNoteRow(Array.isArray(rows) ? rows[0] : rows);
+}
+
+function applyRemoteNote(row, force = false) {
+  if (!els.notepad) return;
+  const next = normalizeNoteRow(row);
+  const isRemoteNewer = next.updated_at && next.updated_at !== noteRemoteUpdatedAt;
+  if (!force && !isRemoteNewer) return;
+  if (!force && noteDirty && document.activeElement === els.notepad) {
+    updateNoteMeta("다른 기기의 변경 감지:");
+    return;
+  }
+  if (els.notepad.value !== next.content) {
+    els.notepad.value = next.content;
+  }
+  noteDirty = false;
+  noteRemoteUpdatedAt = next.updated_at || noteRemoteUpdatedAt;
+  updateNoteMeta("최근 동기화:");
+}
+
+function scheduleNoteSave() {
+  if (!els.notepad) return;
+  noteDirty = true;
+  setNoteStatus("자동 저장 대기", "saving");
+  if (noteSaveTimer) clearTimeout(noteSaveTimer);
+  noteSaveTimer = setTimeout(() => {
+    void flushNoteSave();
+  }, NOTEPAD_SAVE_DELAY_MS);
+}
+
+async function flushNoteSave() {
+  if (!els.notepad || noteSaving) return;
+  if (noteSaveTimer) {
+    clearTimeout(noteSaveTimer);
+    noteSaveTimer = null;
+  }
+  noteSaving = true;
+  setNoteStatus("저장 중", "saving");
+  const content = els.notepad.value.slice(0, NOTEPAD_MAX_CHARS);
+  if (content !== els.notepad.value) els.notepad.value = content;
+  try {
+    const row = await saveNote(content);
+    if (els.notepad.value === content) noteDirty = false;
+    noteRemoteUpdatedAt = row.updated_at || new Date().toISOString();
+    setNoteStatus("저장됨");
+    updateNoteMeta("최근 저장:");
+    if (noteDirty) scheduleNoteSave();
+  } catch (error) {
+    setNoteStatus("저장 실패", "error");
+    updateNoteMeta(error.message || "저장 실패");
+  } finally {
+    noteSaving = false;
+  }
+}
+
+async function pollNote() {
+  if (!els.notepad) return;
+  try {
+    applyRemoteNote(await fetchNote(), false);
+    if (!noteDirty) setNoteStatus("동기화됨");
+  } catch (error) {
+    setNoteStatus("동기화 실패", "error");
+    updateNoteMeta(error.message || "동기화 실패");
+  } finally {
+    notePollTimer = setTimeout(pollNote, NOTEPAD_POLL_MS);
+  }
+}
+
+async function copyNote() {
+  if (!els.notepad) return;
+  try {
+    await navigator.clipboard.writeText(els.notepad.value);
+    updateNoteMeta("메모 전체 복사됨");
+  } catch {
+    els.notepad.select();
+    updateNoteMeta("선택된 내용을 복사하세요");
+  }
+}
+
+function updateNotepadVisibility() {
+  const shouldShow = currentChannel === "dev";
+  if (els.notepadSection) els.notepadSection.hidden = !shouldShow;
+  if (shouldShow) void initNotepad();
+}
+
+async function initNotepad() {
+  if (!els.notepad || noteInitialized) return;
+  noteInitialized = true;
+  noteClientId = ensureNoteClientId();
+  setNoteStatus("불러오는 중", "saving");
+  els.notepad.addEventListener("input", scheduleNoteSave);
+  els.copyNote.addEventListener("click", copyNote);
+  window.addEventListener("beforeunload", () => {
+    if (noteSaveTimer) clearTimeout(noteSaveTimer);
+    if (noteDirty) void flushNoteSave();
+  });
+  try {
+    applyRemoteNote(await fetchNote(), true);
+    setNoteStatus("동기화됨");
+  } catch (error) {
+    setNoteStatus("연결 실패", "error");
+    updateNoteMeta(error.message || "메모장을 불러오지 못했습니다.");
+  } finally {
+    if (!notePollTimer) notePollTimer = setTimeout(pollNote, NOTEPAD_POLL_MS);
   }
 }
 

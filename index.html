@@ -13,7 +13,7 @@
     >
     <link rel="preload" href="./assets/story_title_logo.png?v=android-light-20260514" as="image">
     <link rel="preload" href="./assets/moai.png?v=android-light-20260514" as="image">
-    <link rel="stylesheet" href="./styles.css?v=android-light-20260514">
+    <link rel="stylesheet" href="./styles.css?v=notepad-dev-20260515">
   </head>
   <body>
     <div class="page-shell">
@@ -53,6 +53,27 @@
                 <img class="hero-moai-image" src="./assets/moai.png?v=android-light-20260514" alt="" width="1024" height="1024">
               </div>
             </div>
+          </div>
+        </section>
+
+        <section class="notepad-section" id="notepad-section" aria-labelledby="notepad-title" hidden>
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Shared notepad</p>
+              <h2 id="notepad-title">공유 메모장</h2>
+            </div>
+            <span class="notepad-status" id="notepad-status">연결 준비 중</span>
+          </div>
+          <textarea
+            id="shared-notepad"
+            class="shared-notepad"
+            rows="10"
+            spellcheck="false"
+            placeholder="여기에 링크, 디버그 로그, 짧은 메모를 붙여넣으면 자동으로 저장됩니다."
+          ></textarea>
+          <div class="notepad-footer">
+            <span id="notepad-meta">저장 버튼 없이 자동 저장됩니다.</span>
+            <button class="ghost-button compact" id="copy-note" type="button">전체 복사</button>
           </div>
         </section>
 
@@ -125,6 +146,6 @@
         JavaScript가 꺼져 있으면 버전 목록을 불러올 수 없습니다.
       </div>
     </noscript>
-    <script src="./app.js?v=android-light-20260514" defer></script>
+    <script src="./app.js?v=notepad-dev-20260515" defer></script>
   </body>
 </html>

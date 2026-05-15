@@ -377,7 +377,8 @@ h2 {
 
 .latest-panel,
 .release-section,
-.guide-section {
+.guide-section,
+.notepad-section {
   border: 2px solid var(--ink);
   border-radius: 8px;
   background: rgba(255, 253, 241, 0.94);
@@ -386,8 +387,17 @@ h2 {
 
 .latest-panel,
 .release-section,
-.guide-section {
+.guide-section,
+.notepad-section {
   padding: 22px;
+}
+
+.notepad-section {
+  margin: 0 0 18px;
+}
+
+.notepad-section[hidden] {
+  display: none;
 }
 
 .status-pill,
@@ -407,6 +417,70 @@ h2 {
 
 .tag-pill {
   background: #e5efc5;
+}
+
+.notepad-status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 0 10px;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  background: #d7efe8;
+  color: var(--ink);
+  font-size: 0.78rem;
+  font-weight: 950;
+  white-space: nowrap;
+}
+
+.notepad-status.saving {
+  background: var(--paper-strong);
+}
+
+.notepad-status.error {
+  background: #ffd8d0;
+  color: #8b251f;
+}
+
+.shared-notepad {
+  display: block;
+  width: 100%;
+  min-height: 250px;
+  max-height: 62vh;
+  padding: 16px;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  outline: none;
+  resize: vertical;
+  background: #fffdf1;
+  color: var(--ink);
+  font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+  box-shadow: inset 0 5px 0 rgba(21, 22, 17, 0.06);
+}
+
+.shared-notepad:focus {
+  box-shadow:
+    inset 0 5px 0 rgba(21, 22, 17, 0.06),
+    0 0 0 3px rgba(22, 133, 138, 0.18);
+}
+
+.notepad-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 850;
+}
+
+.ghost-button.compact {
+  min-height: 38px;
+  padding: 0 12px;
 }
 
 .tag-pill.dev {
@@ -953,6 +1027,7 @@ h2 {
   }
 
   .latest-panel,
+  .notepad-section,
   .release-section,
   .guide-section {
     padding: 18px;
@@ -980,9 +1055,15 @@ h2 {
   .button-row,
   .primary-button,
   .icon-button,
+  .notepad-footer,
   .release-button,
   .release-link {
     width: 100%;
+  }
+
+  .notepad-footer {
+    align-items: stretch;
+    flex-direction: column;
   }
 
   .release-actions {
