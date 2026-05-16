@@ -1,5 +1,21 @@
 [
   {
+    "version": "v1.0.0-prod.20260517",
+    "title": "MoaiWannaSlam v1.0.0-prod.20260517 prod",
+    "displayName": "MoaiWannaSlam public Android APK",
+    "channel": "prod",
+    "prerelease": false,
+    "publishedAt": "2026-05-16T15:19:55Z",
+    "buildType": "prod",
+    "commit": "acadafd4e06fba6bc09c765b76af5e4e029e5b35",
+    "sha256": "c279e7b428e1f26f74ba1afb4840871241cbfdf24027867ddc8fa8df8186b035",
+    "apkName": "moaiwannaslam-v1.0.0-prod.20260517.apk",
+    "apkUrl": "./prod/moaiwannaslam-v1.0.0-prod.20260517.apk",
+    "releaseUrl": "",
+    "size": 91470969,
+    "downloadCount": null
+  },
+  {
     "version": "v0.1.1-prod.20260514",
     "title": "MoaiWannaSlam v0.1.1-prod.20260514 prod",
     "displayName": "MoaiWannaSlam public Android APK",
