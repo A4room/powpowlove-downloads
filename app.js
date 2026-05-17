@@ -1,5 +1,5 @@
 const LOCAL_RELEASES_URL = "./releases.json";
-const DEV_RELEASES_URL = "./dev-releases.json?v=20260518.0036";
+const DEV_RELEASES_URL = "./dev-releases.json?v=20260518.0042";
 const DEV_KEY_HASH = "eb4080bca2d2203c33085dff2f7b31436928f5902ea2d5c6e0464d2a98b352d4";
 const NOTEPAD_SUPABASE_URL = "https://oapdqvpcdjvfiqimzdqv.supabase.co";
 const NOTEPAD_SUPABASE_KEY = "sb_publishable_nWA13mDAwnsBQyBkdqDozQ_RTVH4cup";
